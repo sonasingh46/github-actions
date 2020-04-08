@@ -1,3 +1,8 @@
+/*
+Copyright (c) 2020-present Author(sonasingh46@gmail.com). All Rights Reserved.
+See LICENSE.txt for license information.
+*/
+
 package foo
 
 import "testing"
@@ -12,19 +17,19 @@ func TestIsEven(t *testing.T) {
 		want bool
 	}{
 		{
-			name:"Test Case #1",
-			args:args{
-				number:2,
+			name: "Test Case #1",
+			args: args{
+				number: 2,
 			},
-			want:true,
+			want: true,
 		},
 
 		{
-			name:"Test Case #2",
-			args:args{
-				number:3,
+			name: "Test Case #2",
+			args: args{
+				number: 3,
 			},
-			want:false,
+			want: false,
 		},
 	}
 	for _, tt := range tests {
