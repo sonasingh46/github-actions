@@ -62,6 +62,8 @@ jobs:
         run: |
           chmod +x hack/minikube.sh
           ./hack/minikube.sh
+          echo ${{ github.event.pull_request.head.sha }}
+          echo ${{ github.event.pull_request.head.sha }}
 
       - name: Configure Kubectl
         run: |
@@ -70,6 +72,10 @@ jobs:
           kubectl version
           echo "Get the node"
           kubectl get node
+
+#      - name: Make images of cstor-operators with the latest commit
+#        run: |
+#          make images IMAGE_TAG=${{ github.event.pull_request.head.sha }}
 
 
 
