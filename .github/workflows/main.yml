@@ -73,9 +73,13 @@ jobs:
           echo "Get the node"
           kubectl get node
 
-#      - name: Make images of cstor-operators with the latest commit
-#        run: |
-#          make images IMAGE_TAG=${{ github.event.pull_request.head.sha }}
+      - name: Configure Kustomize
+        run: |
+          curl -s "https://raw.githubusercontent.com/\
+          kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+          echo "Kustomize Version"
+          kustomize version
+
 
 
 
