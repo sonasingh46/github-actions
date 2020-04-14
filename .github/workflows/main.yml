@@ -75,9 +75,8 @@ jobs:
 
       - name: Configure Kustomize
         run: |
-          curl -s "https://raw.githubusercontent.com/\
-          kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
-          echo "Kustomize Version"
+          chmod +x hack/install_kustomize.sh
+          ./hack/install_kustomize.sh /usr/local/bin/
           kustomize version
 
 
