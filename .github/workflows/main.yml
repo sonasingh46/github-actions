@@ -79,6 +79,15 @@ jobs:
           ./hack/install_kustomize.sh /usr/local/bin/
           kustomize version
 
+      - name: Create openebs namespace and install NDM
+        run: |
+          chmod +x hack/install_ndm.sh
+          ./hack/install_ndm.sh
+          echo "Applying customized ndm-operator YAML"
+          kubectl create ns openebs
+          kustomize build actions_ci/install_artifacts/ndm-operator | kubectl apply -f -
+          kubectl get ds,deploy -n openebs
+
 
 
 
