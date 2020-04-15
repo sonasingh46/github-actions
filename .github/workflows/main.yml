@@ -57,56 +57,11 @@ jobs:
           fetch-depth: 1
           path: go/src/github.com/sonasingh46/github-actions
 
-      # Check for go formatting
-      - name: Configure Minikube
+      - name: Ginkgo Install
         run: |
-          chmod +x hack/minikube.sh
-          ./hack/minikube.sh
-          echo ${{ github.event.pull_request.head.sha }}
-          echo ${{ github.event.pull_request.head.sha }}
-
-      - name: Configure Kubectl
-        run: |
-          sudo chown -R $USER $HOME/.kube $HOME/.minikube
-          echo "Get kubectl client and server version"
-          kubectl version
-          echo "Get the node"
-          kubectl get node
-
-      - name: Configure Kustomize
-        run: |
-          chmod +x hack/install_kustomize.sh
-          ./hack/install_kustomize.sh /usr/local/bin/
-          kustomize version
-
-      - name: Install Docker
-        run: |
-          sudo apt-get install \
-              apt-transport-https \
-              ca-certificates \
-              curl \
-              gnupg-agent \
-              software-properties-common
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-          sudo add-apt-repository \
-             "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-             $(lsb_release -cs) \
-             stable"
-          
-          sudo apt-get update
-          sudo apt-get install docker-ce docker-ce-cli containerd.io
-          docker --version
-
-      - name: Create openebs namespace and install NDM
-        run: |
-          chmod +x hack/install_ndm.sh
-          ./hack/install_ndm.sh
-          echo "Applying customized ndm-operator YAML"
-          kubectl create ns openebs
-          kustomize build actions_ci/install_artifacts/ndm-operator | kubectl apply -f -
-          kubectl get ds,deploy -n openebs
-
+          go install github.com/onsi/ginkgo/ginkgo
+          export PATH=$PATH:$(go env GOPATH)/bin
+          ginkgo version
 
 
 
