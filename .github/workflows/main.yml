@@ -57,11 +57,37 @@ jobs:
           fetch-depth: 1
           path: go/src/github.com/sonasingh46/github-actions
 
-      - name: Ginkgo Install
+      - name: Install Docker
         run: |
-          go install github.com/onsi/ginkgo/ginkgo
-          export PATH=$PATH:$(go env GOPATH)/bin
-          ginkgo version
+          sudo apt-get install \
+              apt-transport-https \
+              ca-certificates \
+              curl \
+              gnupg-agent \
+              software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+          sudo add-apt-repository \
+             "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+             $(lsb_release -cs) \
+             stable"
+
+          sudo apt-get update
+          sudo apt-get install docker-ce docker-ce-cli containerd.io
+          docker --version
+
+      - name: Configure Minikube
+        run: |
+          chmod +x hack/minikube.sh
+          ./hack/minikube.sh
+
+      - name: Configure Kubectl
+        run: |
+          sudo chown -R $USER $HOME/.kube $HOME/.minikube
+          echo "Get kubectl client and server version"
+          kubectl version
+          echo "Get the node"
+          kubectl get node
 
 
 
