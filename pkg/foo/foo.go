@@ -9,3 +9,8 @@ package foo
 func IsEven(number int) bool {
 	return (number % 2) == 0
 }
+
+// IsEven returns true if the provided number is even else returns false.
+func IsOdd(number int) bool {
+	return (number % 2) != 0
+}
