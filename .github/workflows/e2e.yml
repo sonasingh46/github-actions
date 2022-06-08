@@ -1,0 +1,10 @@
+name: e2e-full
+on:
+  pull_request:
+    types: [labeled, opened]
+jobs:
+  e2e-pr-full:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v2
