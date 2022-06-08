@@ -3,24 +3,33 @@ on:
   issue_comment:                                     
     types: [created, edited, deleted]
 jobs:
- e2e-pr-full:
-   if: contains(github.event.comment.html_url, '/pull/')
-   runs-on: ubuntu-latest
-   steps:
-    - name: Checkout code
+  e2e-pr-full:
+    if: contains(github.event.comment.body, '/test-full-e2e')
+    runs-on: ubuntu-latest
+    steps:
+    - name: GitHub API Req
+      id: request
+      uses: octokit/request-action@v2.0.0
+      with:
+        route: ${{ github.event.issue.pull_request.url }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.TRIGGER_SECRET }}
+
+    - name: Checkout Branch
       uses: actions/checkout@v2
-      if: contains(github.event.comment.body, '/test-full-e2e')
+      with:
+        token: ${{ secrets.TRIGGER_SECRET }}
+        repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
+        ref: ${{ steps.pr_data.outputs.branch }}
 
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
         go-version: 1.17
-      if: contains(github.event.comment.body, '/test-full-e2e')
-
+      
     - name: Install ginkgo
       run: go get github.com/onsi/ginkgo/ginkgo@v1.16.5
-      if: contains(github.event.comment.body, '/test-full-e2e')
 
     - name: turn off swap
       run: sudo swapoff -a
-      if: contains(github.event.comment.body, '/test-full-e2e')
+      
