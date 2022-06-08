@@ -9,6 +9,18 @@ jobs:
     if: contains(github.event.comment.body, '/test-full-e2e')
     runs-on: ubuntu-latest
     steps:
+    - name: Create comment
+      env:
+        URL: ${{ github.event.issue.comments_url }}
+        GITHUB_TOKEN: ${{ secrets.TRIGGER_SECRET }}
+      run: |
+        curl \
+          -X POST \
+          $URL \
+          -H "Content-Type: application/json" \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          --data '{ "body": ":test_tube: [starting ci integration job]( https://github.com/'"$GITHUB_REPOSITORY"'/actions/runs/'"$GITHUB_RUN_ID"')" }'
+
     - name: GitHub API Req
       id: request
       uses: octokit/request-action@v2.0.2
