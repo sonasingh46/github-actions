@@ -1,5 +1,7 @@
 name: e2e-full
 on:
+  pull_request:
+    types: [opened]
   issue_comment:                                     
     types: [created, edited, deleted]
 jobs:
@@ -9,14 +11,14 @@ jobs:
     steps:
     - name: GitHub API Req
       id: request
-      uses: octokit/request-action@v2.0.0
+      uses: octokit/request-action@v2.0.2
       with:
         route: ${{ github.event.issue.pull_request.url }}
       env:
         GITHUB_TOKEN: ${{ secrets.TRIGGER_SECRET }}
 
     - name: Checkout Branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         token: ${{ secrets.TRIGGER_SECRET }}
         repository: ${{ fromJson(steps.request.outputs.data).head.repo.full_name }}
